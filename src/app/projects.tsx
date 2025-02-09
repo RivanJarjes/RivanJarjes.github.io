@@ -138,7 +138,18 @@ export default function Projects() {
     const handleProjectClick = (e: React.MouseEvent, project: Project) => {
         e.preventDefault();
         setSelectedProject(project);
-        if (terminalRef.current) {
+        
+        // Check if we're on mobile (screen width < 1024px for lg breakpoint)
+        const isMobile = window.innerWidth < 1024;
+        
+        if (isMobile) {
+            // Scroll to top of projects section with smooth behavior
+            window.scrollTo({
+                top: sectionRef.current?.offsetTop || 0,
+                behavior: 'smooth'
+            });
+        } else if (terminalRef.current) {
+            // On desktop, just scroll the terminal content
             terminalRef.current.scrollTo({
                 top: 0,
                 behavior: 'smooth'

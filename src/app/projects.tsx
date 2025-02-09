@@ -139,30 +139,32 @@ export default function Projects() {
         e.preventDefault();
         setSelectedProject(project);
         
-        // Check if we're on mobile (screen width < 1024px for lg breakpoint)
+        // Check if we're on mobile
         const isMobile = window.innerWidth < 1024;
         
-        if (isMobile && terminalRef.current) {
-            // Get the terminal element
-            const terminal = terminalRef.current;
-            
-            // Use requestAnimationFrame to ensure DOM updates are complete
-            requestAnimationFrame(() => {
-                const terminalRect = terminal.getBoundingClientRect();
-                const absoluteTop = window.pageYOffset + terminalRect.top;
-                const headerOffset = 20;
+        if (isMobile) {
+            setTimeout(() => {
+                const headerHeight = 20;
+                const targetPosition = window.pageYOffset + (sectionRef.current?.getBoundingClientRect().top || 0);
                 
                 window.scrollTo({
-                    top: absoluteTop - headerOffset,
+                    top: Math.max(0, targetPosition - headerHeight),
+                    behavior: 'auto'
+                });
+                
+                // Instant scroll for terminal on mobile
+                if (terminalRef.current) {
+                    terminalRef.current.scrollTop = 0;
+                }
+            }, 0);
+        } else {
+            // On desktop, only scroll the terminal content smoothly
+            if (terminalRef.current) {
+                terminalRef.current.scrollTo({
+                    top: 0,
                     behavior: 'smooth'
                 });
-            });
-        } else if (terminalRef.current) {
-            // On desktop, just scroll the terminal content
-            terminalRef.current.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            }
         }
     };
 
@@ -179,71 +181,10 @@ export default function Projects() {
                     </span>
                 </h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
-                    {/* Project List */}
-                    <div 
-                        className="projects-scroll order-2 lg:order-1" 
-                        style={{ 
-                            height: 'auto',
-                            minHeight: 'auto',
-                            maxHeight: 'none',
-                            overflow: 'visible'
-                        }}
-                    >
-                        {isLoading ? (
-                            <div className="text-center text-[var(--secondary-text)]">
-                                Loading projects...
-                            </div>
-                        ) : error ? (
-                            <div className="text-center text-red-500">
-                                {error}
-                            </div>
-                        ) : (
-                            <div className="grid gap-6">
-                                {projects.map((project, index) => (
-                                    <div 
-                                        key={index}
-                                        className={`opacity-0 transform translate-y-4 transition-all duration-300 ease-out
-                                            ${isVisible ? 'opacity-100 translate-y-0' : ''}
-                                        `}
-                                        style={{ transitionDelay: `${(projectsTitle.length * 0.05) + 0.2 + (index * 0.05)}s` }}
-                                    >
-                                        <div 
-                                            onClick={(e) => handleProjectClick(e, project)}
-                                            className={`block p-6 rounded-lg border transition-colors duration-200 cursor-pointer
-                                                ${selectedProject?.name === project.name 
-                                                    ? 'border-[var(--accent-color)]' 
-                                                    : 'border-[var(--border-color)] hover:border-[var(--accent-color)]'
-                                                }
-                                            `}
-                                        >
-                                            <div className="flex items-center justify-between mb-2">
-                                                <h3 className="text-2xl font-bold text-[var(--accent-color)]">
-                                                    {project.name}
-                                                </h3>
-                                                <a 
-                                                    href={project.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    className="p-1 hover:opacity-80 transition-opacity"
-                                                >
-                                                    <UilLink className="w-5 h-5 fill-[var(--accent-color)]" />
-                                                </a>
-                                            </div>
-                                            <p className="text-[var(--secondary-text)]">
-                                                {project.short_description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
                     {/* Terminal Display */}
                     <div 
                         ref={terminalRef}
-                        className="bg-black rounded-lg p-4 sm:p-6 font-mono text-green-500 lg:sticky lg:top-24 terminal-scroll order-1 lg:order-2"
+                        className="bg-black rounded-lg p-4 sm:p-6 font-mono text-green-500 lg:sticky lg:top-24 terminal-scroll order-1"
                         style={{ 
                             height: selectedProject ? 'calc(100vh - 8rem)' : 'auto',
                             maxHeight: selectedProject ? '600px' : 'auto',
@@ -338,6 +279,67 @@ export default function Projects() {
                         ) : (
                             <div className="h-full flex items-center justify-center text-green-500/50">
                                 Select a project to view details...
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Project List */}
+                    <div 
+                        className="projects-scroll order-2" 
+                        style={{ 
+                            height: 'auto',
+                            minHeight: 'auto',
+                            maxHeight: 'none',
+                            overflow: 'visible'
+                        }}
+                    >
+                        {isLoading ? (
+                            <div className="text-center text-[var(--secondary-text)]">
+                                Loading projects...
+                            </div>
+                        ) : error ? (
+                            <div className="text-center text-red-500">
+                                {error}
+                            </div>
+                        ) : (
+                            <div className="grid gap-6">
+                                {projects.map((project, index) => (
+                                    <div 
+                                        key={index}
+                                        className={`opacity-0 transform translate-y-4 transition-all duration-300 ease-out
+                                            ${isVisible ? 'opacity-100 translate-y-0' : ''}
+                                        `}
+                                        style={{ transitionDelay: `${(projectsTitle.length * 0.05) + 0.2 + (index * 0.05)}s` }}
+                                    >
+                                        <div 
+                                            onClick={(e) => handleProjectClick(e, project)}
+                                            className={`block p-6 rounded-lg border transition-colors duration-200 cursor-pointer
+                                                ${selectedProject?.name === project.name 
+                                                    ? 'border-[var(--accent-color)]' 
+                                                    : 'border-[var(--border-color)] hover:border-[var(--accent-color)]'
+                                                }
+                                            `}
+                                        >
+                                            <div className="flex items-center justify-between mb-2">
+                                                <h3 className="text-2xl font-bold text-[var(--accent-color)]">
+                                                    {project.name}
+                                                </h3>
+                                                <a 
+                                                    href={project.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="p-1 hover:opacity-80 transition-opacity"
+                                                >
+                                                    <UilLink className="w-5 h-5 fill-[var(--accent-color)]" />
+                                                </a>
+                                            </div>
+                                            <p className="text-[var(--secondary-text)]">
+                                                {project.short_description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>

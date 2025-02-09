@@ -186,10 +186,8 @@ export default function Projects() {
                         ref={terminalRef}
                         className="bg-black rounded-lg p-4 sm:p-6 font-mono text-green-500 lg:sticky lg:top-24 terminal-scroll order-1"
                         style={{ 
-                            height: selectedProject ? 'calc(100vh - 8rem)' : 'auto',
-                            maxHeight: selectedProject ? '600px' : 'auto',
-                            minHeight: selectedProject ? '300px' : 'auto',
-                            overflowY: selectedProject ? 'auto' : 'hidden'
+                            height: '600px',
+                            overflowY: 'auto'
                         }}
                     >
                         <div className="flex items-center space-x-2 mb-4">
@@ -277,7 +275,7 @@ export default function Projects() {
                                 </div>
                             </div>
                         ) : (
-                            <div className="h-full flex items-center justify-center text-green-500/50">
+                            <div className="h-[calc(100%-2rem)] flex items-center justify-center text-green-500/50">
                                 Select a project to view details...
                             </div>
                         )}

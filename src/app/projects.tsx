@@ -20,16 +20,32 @@ interface Project {
 export default function Projects() {
     const [isVisible, setIsVisible] = useState(false);
     const [projects, setProjects] = useState<Project[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const terminalRef = useRef<HTMLDivElement>(null);
     const projectsTitle = "projects";
 
     useEffect(() => {
-        // Fetch projects data
-        fetch('/projects.json')
-            .then(response => response.json())
-            .then(data => setProjects(data.projects))
-            .catch(error => console.error('Error loading projects:', error));
+        setIsLoading(true);
+        fetch(`${window.location.origin}/projects.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setProjects(data.projects);
+                setError(null);
+            })
+            .catch(error => {
+                console.error('Error loading projects:', error);
+                setError('Failed to load projects');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
 
     const renderText = (text: string, baseDelay: number, charDelay: number) => {
@@ -143,45 +159,55 @@ export default function Projects() {
                             minHeight: '300px'
                         }}
                     >
-                        <div className="grid gap-6">
-                            {projects.map((project, index) => (
-                                <div 
-                                    key={index}
-                                    className={`opacity-0 transform translate-y-4 transition-all duration-300 ease-out
-                                        ${isVisible ? 'opacity-100 translate-y-0' : ''}
-                                    `}
-                                    style={{ transitionDelay: `${(projectsTitle.length * 0.05) + 0.2 + (index * 0.05)}s` }}
-                                >
+                        {isLoading ? (
+                            <div className="text-center text-[var(--secondary-text)]">
+                                Loading projects...
+                            </div>
+                        ) : error ? (
+                            <div className="text-center text-red-500">
+                                {error}
+                            </div>
+                        ) : (
+                            <div className="grid gap-6">
+                                {projects.map((project, index) => (
                                     <div 
-                                        onClick={(e) => handleProjectClick(e, project)}
-                                        className={`block p-6 rounded-lg border transition-colors duration-200 cursor-pointer
-                                            ${selectedProject?.name === project.name 
-                                                ? 'border-[var(--accent-color)]' 
-                                                : 'border-[var(--border-color)] hover:border-[var(--accent-color)]'
-                                            }
+                                        key={index}
+                                        className={`opacity-0 transform translate-y-4 transition-all duration-300 ease-out
+                                            ${isVisible ? 'opacity-100 translate-y-0' : ''}
                                         `}
+                                        style={{ transitionDelay: `${(projectsTitle.length * 0.05) + 0.2 + (index * 0.05)}s` }}
                                     >
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h3 className="text-2xl font-bold text-[var(--accent-color)]">
-                                                {project.name}
-                                            </h3>
-                                            <a 
-                                                href={project.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                onClick={(e) => e.stopPropagation()}
-                                                className="p-1 hover:opacity-80 transition-opacity"
-                                            >
-                                                <UilLink className="w-5 h-5 fill-[var(--accent-color)]" />
-                                            </a>
+                                        <div 
+                                            onClick={(e) => handleProjectClick(e, project)}
+                                            className={`block p-6 rounded-lg border transition-colors duration-200 cursor-pointer
+                                                ${selectedProject?.name === project.name 
+                                                    ? 'border-[var(--accent-color)]' 
+                                                    : 'border-[var(--border-color)] hover:border-[var(--accent-color)]'
+                                                }
+                                            `}
+                                        >
+                                            <div className="flex items-center justify-between mb-2">
+                                                <h3 className="text-2xl font-bold text-[var(--accent-color)]">
+                                                    {project.name}
+                                                </h3>
+                                                <a 
+                                                    href={project.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="p-1 hover:opacity-80 transition-opacity"
+                                                >
+                                                    <UilLink className="w-5 h-5 fill-[var(--accent-color)]" />
+                                                </a>
+                                            </div>
+                                            <p className="text-[var(--secondary-text)]">
+                                                {project.short_description}
+                                            </p>
                                         </div>
-                                        <p className="text-[var(--secondary-text)]">
-                                            {project.short_description}
-                                        </p>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Terminal Display */}

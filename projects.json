@@ -1,0 +1,58 @@
+{
+    "projects": [
+        {
+            "name": "miniCrosswordGenerator",
+            "short_description": "A dynamic Mini Crossword Generator powered by LLM inspired by the NYT Mini Crossword.",
+            "long_description": "## Overview\n\nA dynamic crossword puzzle generator that creates NYT Mini-style puzzles using Large Language Models.\n\n### Features\n\n- Generates 5x5 crossword puzzles\n- Uses LLM (fine-tuned GPT or Perplexity) for clue generation\n- Validates puzzle connectivity\n- Ensures clue quality and difficulty\n\n### Technologies\n\n- Python\n- OpenAI API\n- Spring Boot\n- React\n\nVisit the [GitHub repo](https://github.com/RivanJarjes/miniCrosswordGenerator) for more details.",
+            "link": "https://github.com/RivanJarjes/miniCrosswordGenerator",
+            "media": [
+                {
+                    "type": "video",
+                    "src": "/miniCrosswordDemo.mp4"
+                }
+            ]
+        },
+        {
+            "name": "workoutAnalyzer",
+            "short_description": "Uses a machine learning model to analyze lat pulldown form data and provide feedback on the user's performance.",
+            "long_description": "## Overview\n\nA real-time machine learning system that analyzes lat pulldown exercise form and provides instant feedback to improve workout effectiveness.\n\n### Features\n\n- Real-time pose detection and analysis\n- Joint angle calculation and tracking\n- Form correctness classification\n- Visual feedback with joint angles and movement paths\n- Personalized improvement recommendations\n\n### Technologies\n\n- Python\n- OpenCV\n- MediaPipe\n- TensorFlow\n\nVisit the [GitHub repo](https://github.com/rivanjarjes/workoutAnalyzer) for more details.",            
+            "link": "https://github.com/rivanjarjes/workoutAnalyzer"
+        },
+        {
+            "name": "textEditor",
+            "short_description": "A basic C++ text editor.",
+            "long_description": "## Overview\n\nA lightweight text editor built from scratch with native MacOS integration and efficient text handling capabilities.\n\n### Features\n\n- Memory-efficient text buffer using Piece Table implementation\n- Line-cached nodes for handling large documents\n- Complete input system with mouse support and MacOS shortcuts\n- Native file dialog integration using Cocoa\n- System clipboard integration\n- Programming line gutter\n\n### Technologies\n\n- C++\n- SFML Library\n- Cocoa Framework\n- Clip Library\n\n### Future Enhancements\n\n- Syntax highlighting using JSON configuration\n- Scrollbar implementation\n- Enhanced memory management for large files\n\nVisit the [GitHub repo](https://github.com/rivanjarjes/textEditor) for more details.",
+            "link": "https://github.com/rivanjarjes/textEditor",
+            "media": [
+                {
+                    "type": "image",
+                    "src": "/textEditorScreenshot.png"
+                }
+            ]
+        },
+        {
+            "name": "monoChess",
+            "short_description": "Chess server made in C# via XNA/MonoGame with local and online capabilities utilizing peer-to-peer.",
+            "long_description": "## Overview\n\nA fully-featured chess implementation built using MonoGame/XNA framework, supporting both local gameplay and online multiplayer through peer-to-peer networking.\n\n### Features\n\n- Complete chess rule implementation\n- Local multiplayer support\n- Online peer-to-peer gameplay\n- Custom networking protocol\n- Interactive game UI\n- Move validation and highlighting\n\n### Technologies\n\n- C#\n- XNA/MonoGame Framework\n- .NET Networking\n- Peer-to-peer Architecture\n\n### Future Enhancements\n\n- AI opponent implementation\n- Game state saving/loading\n\nVisit the [GitHub repo](https://github.com/rivanjarjes/monoChess) for more details.",
+            "link": "https://github.com/rivanjarjes/monoChess",
+            "media": [
+                {
+                    "type": "image",
+                    "src": "/monoChessScreenshot.png"
+                }
+            ]
+        }, 
+        {
+            "name": "xnaTetris",
+            "short_description": "A Tetris clone written in C# and the XNA/MonoGame framework",
+            "long_description": "## Overview\n\nA feature-complete Tetris implementation built using the MonoGame/XNA framework, faithfully recreating the classic puzzle game with modern programming practices.\n\n### Features\n\n- Classic Tetris gameplay mechanics\n- Piece rotation and movement systems\n- Score tracking and level progression\n- Increasing difficulty system\n- Line clearing animations\n- Next piece preview\n- High score tracking\n\n### Technologies\n\n- C#\n- XNA/MonoGame Framework\n- Custom Game Engine Components\n- Sprite-based Graphics\n\nVisit the [GitHub repo](https://github.com/rivanjarjes/xnaTetris) for more details.",
+            "link": "https://github.com/rivanjarjes/xnaTetris",
+            "media": [
+                {
+                    "type": "image",
+                    "src": "/xnaTetrisScreenshot.png"
+                }
+            ]
+        }
+    ]
+}

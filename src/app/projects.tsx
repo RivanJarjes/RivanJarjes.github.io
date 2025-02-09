@@ -25,6 +25,7 @@ export default function Projects() {
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const terminalRef = useRef<HTMLDivElement>(null);
     const projectsTitle = "projects";
+    const sectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -115,18 +116,22 @@ export default function Projects() {
                 }
             },
             {
-                threshold: 0.5,
-                rootMargin: '-50px 0px'
+                threshold: 0.1,
+                rootMargin: '50px 0px'
             }
         );
 
-        const projectsSection = document.getElementById('projects');
-        if (projectsSection) {
-            observer.observe(projectsSection);
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
         }
+
+        const timer = setTimeout(() => {
+            setIsVisible(true);
+        }, 1000);
 
         return () => {
             observer.disconnect();
+            clearTimeout(timer);
         };
     }, []);
 
@@ -142,7 +147,11 @@ export default function Projects() {
     };
 
     return (
-        <div id="projects" className="min-h-[70vh] flex items-center justify-center py-20">
+        <div 
+            ref={sectionRef}
+            id="projects" 
+            className="min-h-[70vh] flex items-center justify-center py-20"
+        >
             <div className="max-w-6xl px-4 sm:px-8 w-full">
                 <h2 className="text-4xl sm:text-6xl font-bold mb-8 text-[var(--accent-color)]">
                     <span className="relative flex flex-wrap">

@@ -142,10 +142,13 @@ export default function Projects() {
         // Check if we're on mobile (screen width < 1024px for lg breakpoint)
         const isMobile = window.innerWidth < 1024;
         
-        if (isMobile) {
-            // Scroll to top of projects section with smooth behavior
+        if (isMobile && terminalRef.current) {
+            // On mobile, scroll to the terminal element
+            const terminalTop = terminalRef.current.offsetTop;
+            const headerOffset = 20; // Adjust this value if needed
+            
             window.scrollTo({
-                top: sectionRef.current?.offsetTop || 0,
+                top: terminalTop - headerOffset,
                 behavior: 'smooth'
             });
         } else if (terminalRef.current) {

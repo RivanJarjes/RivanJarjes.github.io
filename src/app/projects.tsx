@@ -172,11 +172,12 @@ export default function Projects() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
                     {/* Project List */}
                     <div 
-                        className="projects-scroll overflow-y-auto pr-4 order-2 lg:order-1" 
+                        className="projects-scroll order-2 lg:order-1" 
                         style={{ 
-                            height: 'calc(100vh - 8rem)',
-                            maxHeight: '600px',
-                            minHeight: '300px'
+                            height: 'auto',
+                            minHeight: 'auto',
+                            maxHeight: 'none',
+                            overflow: 'visible'
                         }}
                     >
                         {isLoading ? (
@@ -235,9 +236,9 @@ export default function Projects() {
                         ref={terminalRef}
                         className="bg-black rounded-lg p-4 sm:p-6 font-mono text-green-500 lg:sticky lg:top-24 terminal-scroll order-1 lg:order-2"
                         style={{ 
-                            height: 'calc(100vh - 8rem)',
-                            maxHeight: '600px',
-                            minHeight: '300px',
+                            height: selectedProject ? 'calc(100vh - 8rem)' : 'auto',
+                            maxHeight: selectedProject ? '600px' : 'auto',
+                            minHeight: selectedProject ? '300px' : 'auto',
                             overflowY: selectedProject ? 'auto' : 'hidden'
                         }}
                     >

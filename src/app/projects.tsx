@@ -143,13 +143,19 @@ export default function Projects() {
         const isMobile = window.innerWidth < 1024;
         
         if (isMobile && terminalRef.current) {
-            // On mobile, scroll to the terminal element
-            const terminalTop = terminalRef.current.offsetTop;
-            const headerOffset = 20; // Adjust this value if needed
+            // Get the terminal element
+            const terminal = terminalRef.current;
             
-            window.scrollTo({
-                top: terminalTop - headerOffset,
-                behavior: 'smooth'
+            // Use requestAnimationFrame to ensure DOM updates are complete
+            requestAnimationFrame(() => {
+                const terminalRect = terminal.getBoundingClientRect();
+                const absoluteTop = window.pageYOffset + terminalRect.top;
+                const headerOffset = 20;
+                
+                window.scrollTo({
+                    top: absoluteTop - headerOffset,
+                    behavior: 'smooth'
+                });
             });
         } else if (terminalRef.current) {
             // On desktop, just scroll the terminal content

@@ -12,6 +12,16 @@ const nextConfig = {
       // Add other domains as needed
     ],
   },
+  basePath: '',
+  // If your submodule content is static (HTML, images, etc)
+  async rewrites() {
+    return [
+      {
+        source: '/arc-tools-web/:path*',
+        destination: '/arc-tools-web/out/:path*',
+      },
+    ];
+  },
 }
 
-module.exports = nextConfig
+export default nextConfig

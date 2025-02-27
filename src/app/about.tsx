@@ -27,7 +27,7 @@ export default function About() {
     const aboutContent = `I'm Rivan Jarjes, a ${age} year old CS student from the Greater Toronto Area. I'm primarily interested in software development ` + 
     `and artificial intelligence applications. I'm currently studying Computer Science at Toronto Metropolitan University (2024-2029) and I'm ` + 
     `constantly looking for opportunities to learn and grow as a software engineer. I started programming when I was 11 years old and wanted ` + 
-    `to make my own video games. I've since then grown as a programmer and I'm always looking for new challenges.`;
+    `to make my own video games. I've since then grown as a programmer and I hope to continue to do so.`;
 
     const renderText = (text: string, baseDelay: number, charDelay: number) => {
         let totalChars = 0;

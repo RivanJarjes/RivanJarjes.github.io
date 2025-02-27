@@ -4,8 +4,8 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Tools - Rivan Jarjes",
-  description: "Development tools by Rivan Jarjes"
+  title: "ARC Assembly Simulator - Rivan Jarjes",
+  description: "ARC Assembly Simulator - A web-based simulator for ARC assembly language"
 };
 
 // This tells Next.js that this layout should not inherit from the root layout

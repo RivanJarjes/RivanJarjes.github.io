@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ARC Assembly Simulator - Rivan Jarjes",
+  description: "ARC Assembly Simulator - A web-based simulator for ARC assembly language"
+};
+
 export default function ArcToolsWebLayout({
   children,
 }: Readonly<{

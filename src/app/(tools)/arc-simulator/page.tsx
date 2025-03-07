@@ -44,12 +44,44 @@ interface CCRUpdate {
 
 const CONTAINER_HEIGHT = 600; // Total height of editor + terminal
 
+// Cookie utility functions for editor content
+function saveEditorContentToCookie(content: string) {
+  try {
+    // Save only first 4KB to avoid cookie size limits
+    const truncatedContent = content.length > 4096 ? content.substring(0, 4096) : content;
+    const expires = new Date();
+    expires.setTime(expires.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    document.cookie = `editorContent=${encodeURIComponent(truncatedContent)};expires=${expires.toUTCString()};path=/`;
+  } catch (error) {
+    console.error('Error saving editor content to cookie:', error);
+  }
+}
+
+function getEditorContentFromCookie(): string | null {
+  try {
+    const nameEQ = 'editorContent=';
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) {
+        const encodedContent = c.substring(nameEQ.length, c.length);
+        return decodeURIComponent(encodedContent);
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error('Error loading editor content from cookie:', error);
+    return null;
+  }
+}
+
 export default function Home() {
   const [simulator] = useState(() => new Simulator());
   const cpu = simulator.getCPU();
   const [code, setCode] = useState('');
   const [binaryCode, setBinaryCode] = useState('');
-  const [activeTab, setActiveTab] = useState<'assembly' | 'binary'>('assembly');
+  const [activeTab, setActiveTab] = useState<'assembly' | 'binary' | 'examples'>('assembly');
   const [assemblyError, setAssemblyError] = useState<string | null>(null);
   const [terminalHeight, setTerminalHeight] = useState(120);
   const [isDragging, setIsDragging] = useState(false);
@@ -83,6 +115,70 @@ export default function Home() {
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const isRunningRef = useRef(false);
+  const [exampleFiles, setExampleFiles] = useState<{name: string, path: string}[]>([]);
+  const [isEditorContentLoaded, setIsEditorContentLoaded] = useState(false);
+
+  // Fetch example files when component mounts
+  useEffect(() => {
+    // List of example files in the public directory
+    const examples = [
+      'division.asm',
+      'exponent.asm',
+      'get_iee754_exponent.asm',
+      'hextest.asm',
+      'instructiontest.asm',
+      'load_addition.asm',
+      'loadtest.asm',
+      'multiplication.asm',
+      'storetest.asm',
+      'subtest.asm'
+    ];
+    
+    setExampleFiles(examples.map(file => ({
+      name: file.replace('.asm', ''),
+      path: `/${file}`
+    })));
+  }, []);
+
+  // Initialize the editor content from cookie when the component mounts
+  useEffect(() => {
+    if (isClient) {
+      const savedContent = getEditorContentFromCookie();
+      if (savedContent) {
+        setCode(savedContent);
+      }
+      setIsEditorContentLoaded(true);
+    }
+  }, [isClient]);
+  
+  // Save editor content to cookie whenever it changes (debounced)
+  useEffect(() => {
+    if (isClient && isEditorContentLoaded) {
+      const timeoutId = setTimeout(() => {
+        saveEditorContentToCookie(code);
+      }, 1000); // 1 second debounce
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [code, isClient, isEditorContentLoaded]);
+
+  // Function to load an example file
+  const handleLoadExample = async (path: string) => {
+    try {
+      const response = await fetch(path);
+      if (!response.ok) {
+        throw new Error(`Failed to load example file: ${response.statusText}`);
+      }
+      const content = await response.text();
+      setCode(content);
+      saveEditorContentToCookie(content); // Save to cookie when example is loaded
+      setActiveTab('assembly');
+      setTerminalHistory(`Loaded example: ${path.split('/').pop()}`);
+    } catch (error) {
+      console.error('Error loading example:', error);
+      setTerminalHistory(`Error loading example: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
 
   // Calculate the height for the simulation terminal
   const simulationTerminalHeight = 120; // Match the height set for simulation Terminal component
@@ -233,7 +329,9 @@ export default function Home() {
       setAssemblyError(null);
       // Clear binary code and switch to assembly tab before assembling
       setBinaryCode('');
-      setActiveTab('assembly');
+      if (activeTab !== 'assembly') {
+        setActiveTab('assembly');
+      }
       
       const assembled = assemble(code);
       console.log('Assembled code:', assembled);
@@ -256,17 +354,15 @@ export default function Home() {
     }
   };
 
-  const handleTabChange = (tab: 'assembly' | 'binary') => {
+  const handleTabChange = (tab: 'assembly' | 'binary' | 'examples') => {
     if (tab === 'binary' && !binaryCode) return;
     setActiveTab(tab);
   };
 
   // Add file operation handlers
   const handleNewFile = () => {
-    if (code && !confirm('Are you sure you want to create a new file? Any unsaved changes will be lost.')) {
-      return;
-    }
     setCode('');
+    saveEditorContentToCookie(''); // Clear cookie as well
     setBinaryCode('');
     setTerminalHistory('Ready to assemble');
     setIsFileMenuOpen(false);
@@ -275,17 +371,22 @@ export default function Home() {
   const handleOpenFile = () => {
     // Check if we're in the browser environment
     if (!isClient) return;
-    
+
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.asm';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
+    input.onchange = (e) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+      
       if (file) {
-        const text = await file.text();
-        setCode(text);
-        setBinaryCode('');
-        setTerminalHistory('File loaded successfully');
+        const reader = new FileReader();
+        reader.onload = () => {
+          const content = reader.result as string;
+          setCode(content);
+          saveEditorContentToCookie(content); // Save to cookie when file is loaded
+        };
+        reader.readAsText(file);
       }
     };
     input.click();
@@ -968,6 +1069,16 @@ export default function Home() {
                 >
                   Binary File
                 </button>
+                <button
+                  onClick={() => handleTabChange('examples')}
+                  className={`px-6 py-2 text-sm font-medium transition-colors ${
+                    activeTab === 'examples'
+                      ? 'bg-[#1E1E1E] text-white border-b-2 border-[#569CD6]'
+                      : 'bg-[#2D2D2D] text-gray-400 hover:text-gray-300'
+                  }`}
+                >
+                  Load Examples
+                </button>
               </div>
 
               {/* File menu row */}
@@ -1007,12 +1118,14 @@ export default function Home() {
               {/* Editor content with fixed height calculation */}
               <div style={{ height: `${getEditorHeight()}px` }}>
                 <div style={{ display: activeTab === 'assembly' ? 'block' : 'none', height: '100%' }}>
-                  <Editor 
-                    value={code}
-                    onChange={setCode}
-                    language="arc"
-                    height="100%"
-                  />
+                  {isEditorContentLoaded && (
+                    <Editor 
+                      value={code}
+                      onChange={setCode}
+                      language="arc"
+                      height="100%"
+                    />
+                  )}
                 </div>
                 <div style={{ display: activeTab === 'binary' ? 'block' : 'none', height: '100%' }}>
                   <Editor 
@@ -1024,6 +1137,34 @@ export default function Home() {
                     renderWhitespace="all"
                     lineNumbers="on"
                   />
+                </div>
+                <div 
+                  style={{ display: activeTab === 'examples' ? 'block' : 'none', height: '100%' }}
+                  className="bg-[#1E1E1E] p-4 overflow-auto"
+                >
+                  <h2 className="text-lg text-white font-medium mb-4">Example Assembly Files</h2>
+                  <p className="text-gray-400 mb-4">
+                    Click on an example to load it into the Assembly Editor.
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    {exampleFiles.map((file, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleLoadExample(file.path)}
+                        className="bg-[#2D2D2D] hover:bg-[#3D3D3D] transition-colors text-left p-3 rounded-md group"
+                      >
+                        <div className="flex items-center">
+                          <svg className="w-5 h-5 text-[#569CD6] mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 8L14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          <span className="text-gray-300 group-hover:text-white transition-colors">
+                            {file.name}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
               

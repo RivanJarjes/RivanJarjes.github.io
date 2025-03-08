@@ -14,6 +14,7 @@ interface Project {
     short_description: string;
     long_description: string;
     link: string;
+    try_it_out?: string;
     media?: Media[];
 }
 
@@ -201,6 +202,22 @@ export default function Projects() {
                                     <span className="text-green-500/50">$ project name:</span>
                                     <h4 className="text-xl font-bold mt-2">{selectedProject.name}</h4>
                                 </div>
+                                {selectedProject.try_it_out && (
+                                    <div className="border-b border-green-500/20 pb-4">
+                                        <span className="text-green-500/50">$ try it out:</span>
+                                        <a 
+                                            href={selectedProject.try_it_out}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 mt-2 hover:text-green-400 transition-colors group"
+                                        >
+                                            <span className="truncate max-w-[90%]" title={selectedProject.try_it_out}>
+                                                {selectedProject.try_it_out}
+                                            </span>
+                                            <UilLink className="w-4 h-4 fill-green-500 group-hover:fill-green-400 transition-colors shrink-0" />
+                                        </a>
+                                    </div>
+                                )}
                                 <div className="border-b border-green-500/20 pb-4">
                                     <span className="text-green-500/50">$ project link:</span>
                                     <a 

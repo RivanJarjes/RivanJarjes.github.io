@@ -5,7 +5,7 @@ export default function Title() {
       const year = now.getFullYear();
       const month = now.getMonth() + 1;
       const prefix = (year < 2029 && month >= 5 && month < 9) ? 'Incoming ' : '';
-      const suffix = (year < 2029 || (year === 2029 && month < 5)) ? ' compsci student' : 'Software Engineer';
+      const suffix = (year < 2029 || (year === 2029 && month < 5)) ? ' compsci student' : 'software engineer';
 
       if (year <= 2025 && month < 5) {
         return prefix + '1st year' + suffix;

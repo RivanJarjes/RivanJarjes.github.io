@@ -25,9 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         <ScrollToTop />
         {children}
       </body>

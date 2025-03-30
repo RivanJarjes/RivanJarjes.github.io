@@ -173,7 +173,7 @@ export default function Projects() {
         <div 
             ref={sectionRef}
             id="projects" 
-            className="min-h-[70vh] flex items-center justify-center py-20"
+            className="min-h-[70vh] flex items-center justify-center py-20 bg-[#0F0F0F]"
         >
             <div className="max-w-6xl px-4 sm:px-8 w-full">
                 <h2 className="text-4xl sm:text-6xl font-bold mb-8 text-[var(--accent-color)]">

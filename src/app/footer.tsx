@@ -26,7 +26,7 @@ export default function Footer() {
     }, []);
 
     return (
-        <footer id="footer" className="py-6 sm:py-8 mt-12 sm:mt-20 border-t border-[var(--border-color)]">
+        <footer id="footer" className="py-6 sm:py-8 mt-12 sm:mt-20 border-t border-[var(--border-color)] bg-[#0F0F0F]">
             <div className="max-w-3xl mx-auto px-4 sm:px-8">
                 <div 
                     className={`text-center opacity-0 transform translate-y-4 transition-all duration-700 ease-out

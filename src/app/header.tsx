@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 export default function Header() {
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false); 
 
     useEffect(() => {
         const handleScroll = () => {

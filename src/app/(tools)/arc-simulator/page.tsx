@@ -1,15 +1,15 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'SCORE',
-  description: 'SCORE',
+  title: 'ARC Assembly Simulator',
+  description: 'ARC Assembly Simulator',
 };
 
 export default function ARCSimulator() {
   return (
     <div className="w-full h-screen overflow-hidden">
       <iframe
-        src="http://159.203.1.81/"
+        src="https://arc-tools-web.vercel.app/"
         className="w-full h-full border-none"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen

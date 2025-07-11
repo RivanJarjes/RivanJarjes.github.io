@@ -1,8 +1,8 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'ARC Assembly Simulator',
-  description: 'ARC Assembly Simulator',
+  title: 'SCORE',
+  description: 'SCORE',
 };
 
 export default function ARCSimulator() {

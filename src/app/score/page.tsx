@@ -5,7 +5,7 @@ export const metadata = {
   description: 'SCORE',
 };
 
-export default function ARCSimulator() {
+export default function SCORE() {
   return (
     <div className="w-full h-screen overflow-hidden">
       <iframe

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ScrollToTop from './components/ScrollToTop';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +14,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Rivan Jarjes",
-  description: "Software Developer Portfolio"
+  description:
+    "Rivan Jarjes – Software Developer Intern at Geotab and Computer Science student at Toronto Metropolitan University.",
+  metadataBase: new URL("https://rivanjarjes.com"),
+  openGraph: {
+    title: "Rivan Jarjes",
+    description: "Software Developer Intern at Geotab · CS @ TMU",
+    url: "https://rivanjarjes.com",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,12 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+      <head>
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-        <ScrollToTop />
         {children}
       </body>
     </html>

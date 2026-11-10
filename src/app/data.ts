@@ -4,7 +4,7 @@ export const profile = {
     location: 'Toronto, ON',
     bio: [
         "I'm a Computer Science student at Toronto Metropolitan University who likes building backend systems, developer tooling, and products people actually use.",
-        "Right now I'm a software developer intern at Geotab, working on infrastructure for AI coding agents, and a part-time research assistant at the University of Toronto, building a learning platform used by hundreds of students. I started programming at 11 because I wanted to make my own video games, and I haven't stopped since.",
+        "Right now I'm a software developer intern at Geotab, working on infrastructure for AI coding agents, and a part-time research assistant at the University of Toronto, building a learning platform used by hundreds of students.",
     ],
     links: [
         { label: 'GitHub', href: 'https://github.com/rivanjarjes' },

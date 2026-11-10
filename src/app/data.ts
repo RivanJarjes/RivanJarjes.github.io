@@ -123,7 +123,6 @@ export const education = {
     start: 'Sep 2024',
     end: 'May 2028',
     details: [
-        'GPA 3.68 / 4.33',
         'NSERC Undergraduate Student Research Award (2025, 2026)',
         "Dean's List (2024–25, 2025–26)",
     ],
